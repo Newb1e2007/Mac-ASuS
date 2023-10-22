@@ -29,6 +29,10 @@ int main() {
     int time = iter->timeNextBorn;
     int pos = iter->pos;
     int population = iter->population;
+    if (pos > time) {
+        cout << time;
+        return 0;
+    }
     arr.erase(iter);
     Aquarium a; a.pos = pos; a.population = ++population; a.timeNextBorn = time + max(1000 - a.population, 1);
     arr.insert(a);
@@ -40,7 +44,7 @@ int main() {
         time = iter->timeNextBorn;
         population = iter->population;
         //cout << pos << ' ' << time << ' ' << population << " after\n";
-        arr.erase(iter);
+        arr.erase(iter); 
         Aquarium a; a.pos = pos; a.population = ++population; a.timeNextBorn = time + max(1000 - a.population, 1);
         arr.insert(a);
         iter = arr.begin();
