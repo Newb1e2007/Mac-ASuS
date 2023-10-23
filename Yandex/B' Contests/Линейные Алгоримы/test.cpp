@@ -7,7 +7,7 @@ int main() {
     ios::sync_with_stdio(0);
     cin.tie(0);
 
-    int64_t a = (int64_t)1<<(int64_t)32;
+    int a = (1<<24) + 1;
     cout << a;
 
     return 0;

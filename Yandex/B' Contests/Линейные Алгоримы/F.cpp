@@ -18,29 +18,30 @@ int main() {
     int n = 1<<24;
     int m, q; cin >> m >> q;
     ui a, b; cin >> a >> b;
-    vector<int> pref(n + 1);
-    pref[0] = 0;
+    vector<int> cnt(n);
     for (int i = 0; i < m; i++) {
         ui add = nextRand(a, b);
         ui l = nextRand(a, b);
         ui r = nextRand(a, b);
         if (l > r) swap(l, r);
-        pref[l] += (int)add;
-        pref[r] -= (int)add;
+        cnt[l - 1] += (int)add;
+        cnt[r - 1] -= (int)add;
         //cout << pref[r] << '\n';
     }
-    vector<ui> arr(n);
-    for (int i = 1; i < n; i++) {
-        arr[i - 1] = pref[i] + pref[i - 1];
+    //vector<ui> arr(n);
+    vector<int> pref(n + 1);
+    for (int i = 1; i <= n; i++) {
+        pref[i] = pref[i - 1] + cnt[i - 1];
     }
+    
     ull summ = 0;
     ull mod = (ull)1<<(ull)32;
     for (int i = 0; i < q; i++) {
         ui l = nextRand(a, b);
         ui r = nextRand(a, b);
         if (l > r) swap(l, r);
-        for (ui j = l - 1; j < r; j++) {
-            summ += (ull)arr[(int)j];
+        for (ui j = l; j <= r; j++) {
+            summ += (ull)pref[j];
         }
         summ %= mod;
     }
