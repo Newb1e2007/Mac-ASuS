@@ -8,7 +8,13 @@ struct Aquarium {
     int pos;  
 
     bool operator<(const Aquarium& other) const {
-        return timeNextBorn < other.timeNextBorn;
+        if (timeNextBorn < other.timeNextBorn) {
+            return true;
+        } else if (timeNextBorn == other.timeNextBorn) {
+            return pos < other.pos;
+        } else {
+            return false;
+        }
     }
 };
 
@@ -39,11 +45,9 @@ int main() {
     iter = arr.begin();
 
     while (abs(iter->pos - pos) <= iter->timeNextBorn - time) {
-        //cout << pos << ' ' << time << ' ' << population << " before\n";
         pos = iter->pos;
         time = iter->timeNextBorn;
         population = iter->population;
-        //cout << pos << ' ' << time << ' ' << population << " after\n";
         arr.erase(iter); 
         Aquarium a; a.pos = pos; a.population = ++population; a.timeNextBorn = time + max(1000 - a.population, 1);
         arr.insert(a);
