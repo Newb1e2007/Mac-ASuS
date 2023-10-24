@@ -24,25 +24,25 @@ int main() {
         ui l = nextRand(a, b);
         ui r = nextRand(a, b);
         if (l > r) swap(l, r);
-        cnt[l - 1] += (int)add;
-        cnt[r - 1] -= (int)add;
-        //cout << pref[r] << '\n';
+        cnt[l] += (int)add;
+        cnt[r + 1] -= (int)add;
     }
-    //vector<ui> arr(n);
     vector<int> pref(n + 1);
     for (int i = 1; i <= n; i++) {
         pref[i] = pref[i - 1] + cnt[i - 1];
     }
-    
+
+    //vector<ull> pref_summ(n + 1);
+    for(int i = 1; i <= n; i++) {
+        pref[i] = pref[i - 1] + pref[i];
+    }
     ull summ = 0;
     ull mod = (ull)1<<(ull)32;
     for (int i = 0; i < q; i++) {
         ui l = nextRand(a, b);
         ui r = nextRand(a, b);
         if (l > r) swap(l, r);
-        for (ui j = l; j <= r; j++) {
-            summ += (ull)pref[j];
-        }
+        summ += (pref[r + 1] - pref[l]);
         summ %= mod;
     }
     cout << summ;
