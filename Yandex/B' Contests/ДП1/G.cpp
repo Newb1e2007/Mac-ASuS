@@ -24,46 +24,47 @@ int main() {
             }
         }
     }
-    for (int i = 0; i <= n; i++) {
-        for (int j = 0; j <= maxW; j++) {
-            cout << dp[i][j] << ' ';
-        }
-        cout << '\n';
-    }
-    return 0;
     if (!dp[n][maxW]) {
         cout << -1;
         return 0;
     }
-    int x = n, y = maxW, cnt = 0;
+    int i = n, j = maxW;
     map<int, int> WInd_heap;
-    for (int i = 1; i <= n; i++) {
-        WInd_heap[i] = 0;
-    }
-    while (dp[x][y]) {
-        if (dp[x - 1][y] == dp[x][y]) {
-            x--;
-        } else {
-            cnt++;
-            WInd_heap[x] = 1;
-            y -= W[x - 1];
-            x--;
+    while (dp[i--][j] != 0) {
+        int x = i, y = maxW, cnt = 0;
+        for (int i = 1; i <= n; i++) {
+            WInd_heap[i] = 0;
         }
-    }
-    if (n / 2 == cnt) {
-        for (auto el : WInd_heap) {
-            if (el.second == 1) {
-                cout << el.first << ' ';
+        while (x != 0) {
+            if (y >= W[x - 1] && dp[x - 1][y - W[x - 1]]) {
+                cnt++;
+                WInd_heap[x] = 1;
+                y -= W[x - 1];
+                x--;
+            } else {
+                /*if (dp[x - 1][y]) {
+                    x--;
+                } else {
+                    break;
+                }*/
+                x--;
             }
         }
-        cout << '\n';
-        for (auto el : WInd_heap) {
-            if (el.second == 0) {
-                cout << el.first << ' ';
+        if (n / 2 == cnt) {
+            for (auto el : WInd_heap) {
+                if (el.second == 1) {
+                    cout << el.first << ' ';
+                }
             }
+            cout << '\n';
+            for (auto el : WInd_heap) {
+                if (el.second == 0) {
+                    cout << el.first << ' ';
+                }
+            }
+            return 0;
         }
-    } else {
-        cout << -1;
     }
+    cout << -1;
     return 0;    
 }
