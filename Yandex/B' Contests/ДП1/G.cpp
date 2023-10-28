@@ -28,9 +28,9 @@ int main() {
         cout << -1;
         return 0;
     }
-    int i = n, j = maxW;
+    int i = n;
     map<int, int> WInd_heap;
-    while (dp[i--][j] != 0) {
+    while (dp[i--][maxW] != 0) {
         int x = i, y = maxW, cnt = 0;
         for (int i = 1; i <= n; i++) {
             WInd_heap[i] = 0;
@@ -50,7 +50,7 @@ int main() {
                 x--;
             }
         }
-        if (n / 2 == cnt) {
+        if (cnt*2 == n) {
             for (auto el : WInd_heap) {
                 if (el.second == 1) {
                     cout << el.first << ' ';
