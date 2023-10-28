@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+#include <bitset>
 
 using namespace std;
 using bs = bitset<10000000>;
