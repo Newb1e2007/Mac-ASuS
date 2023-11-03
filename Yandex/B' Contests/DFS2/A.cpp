@@ -3,7 +3,7 @@
 using namespace std;
 
 vector<set<int>> graph, graphRev;
-vector<int> used, newUsed, order, newOrder;
+vector<int> used, order;
 
 void dfs1(int v) {
     used[v] = 1;
@@ -22,16 +22,6 @@ void dfs2(int v, int color) {
             dfs2(u, color);
         }
     }
-}
-
-void dfs3(int v) {
-    newUsed[v] = 1;
-    for (auto u : graph[v]) {
-        if (!newUsed[u]) {
-            dfs3(u);
-        }
-    }
-    newOrder.push_back(used[v]);
 }
 
 int main() {
@@ -64,23 +54,8 @@ int main() {
         }
     }
     cout << color - 1 << '\n';
-    /*for (int i = 0; i < n; i++) {
-        for (auto u : graph[i]) {
-            if (used[u] != used[i]) {
-                newGraph[i].insert(u);
-            }
-        }
-    }*/
-    newUsed.resize(n);
-    //used.assign(n, 0);
     for (int i = 0; i < n; i++) {
-        if (!newUsed[i]) {
-            dfs3(i);
-        }
-    }
-    reverse(newOrder.begin(), newOrder.end());
-    for (auto el : newOrder) {
-        cout << el << ' ';
+        cout << color - used[i] << ' ';
     }
     return 0;
 }
