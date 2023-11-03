@@ -7,7 +7,7 @@ vector<int> used, order;
 
 void dfs1(int v) {
     used[v] = 1;
-    for (int u : graph[v]) {
+    for (auto u : graph[v]) {
         if (!used[u]) dfs1(u);
     }
     order.push_back(v);
@@ -15,7 +15,7 @@ void dfs1(int v) {
 
 void dfs2(int v, int color) {
     used[v] = color;
-    for (int u : graphRev[v]) {
+    for (auto u : graphRev[v]) {
         if (!used[u]) dfs2(u, color);
     }
 }
@@ -39,26 +39,39 @@ int main() {
             dfs1(i);
         }
     }
-    reverse(order.begin(), order.end());
     used.assign(n, 0);
     int color = 0;
-    for (int u : order) {
-        if (!used[u]) {
-            dfs2(u, ++color);
+    reverse(order.begin(), order.end());
+    for (auto v : order) {
+        if (!used[v]) {
+            color++;
+            dfs2(v, color);
         }
     }
     newGraph.resize(color);
-    for (int i = 0; i < n; i++) {
-        for (int u : graph[i]) {
-            if (used[i] != used[u]) {
-                newGraph[used[i] - 1].insert(used[u] - 1);
+    for (int v = 0; v < n; v++) {
+        for (auto u : graph[v]) {
+            if (used[v] != used[u]) {
+                newGraph[used[v] - 1].insert(used[u] - 1);
             }
         }
     }
-    int answ = 0;
-    for (auto i : newGraph) {
-        answ += i.size();
+
+    /*for (auto i : used) {
+        cout << i << ' ';
     }
-    cout << answ;
+    return 0;
+    for (int i = 0; i < color; i++) {
+        for (auto u : graph[i]) {
+            cout << i << ' ' << u << '\n';
+        }
+    }
+    return 0;*/
+
+    int answ = 0;
+    for (auto v : newGraph) {
+        if (v.empty()) answ++;
+    }
+    cout << answ;   
     return 0;
 }
