@@ -13,36 +13,6 @@ ll nod(ll a, ll b) {
     return nod(a, b%a);
 }
 
-/*struct smart_deq {
-    deque<int> deq;
-    queue<int> q; //nod
-
-    void add(int x) {
-        q.push(x);
-        //q.push(nod(q.front(), x));
-        while(!deq.empty() && deq.back() > x) {
-            deq.pop_back();
-        }
-        deq.push_back(x);
-    }
-
-    void del() {
-        if (deq.front() == q.front()) {
-            deq.pop_front();
-        }
-        q.pop();
-    }
-
-    void min() {
-        cout << deq.front() << '\n';
-        //return deq.front();
-    }
-};*/
-
-struct window {
-
-};
-
 int main() {
     ios::sync_with_stdio(0);
     cin.tie(0);
