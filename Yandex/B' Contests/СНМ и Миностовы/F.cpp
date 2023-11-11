@@ -47,7 +47,7 @@ int main() {
         ord[i]--;
     }
     reverse(ord.begin(), ord.end());
-    vector<int> answer;
+    vector<ll> answer;
     answer.reserve(n);  
     for (auto ask : ord) {
         answer.push_back(answ);
