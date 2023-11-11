@@ -40,27 +40,39 @@ int main() {
     for (int i = 0; i < m; i++) {
         int a, b; cin >> a >> b;
         ll w; cin >> w;
-        off[a - 1][b - 1] = min(off[a - 1][b - 1], w);
-        off[b - 1][a - 1] = min(off[b - 1][a - 1], w);
+        off[a - 1][b - 1] = w;
+        off[b - 1][a - 1] = w;
     }
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            cout << off[i][j] << ' ';
+        }
+        cout << '\n';
+    }
+    cout << '\n';
     vector<Edge> edges;
     edges.reserve((ll)n*(ll)(n - 1)/(ll)2);
     for (int i = 0; i < n; i++) {
         for (int j = i; j < n; j++) {
             Edge e; e.u = i; e.v = j;
-            if (off[i][j]) e.w = min(off[i][j], arr[i] + arr[j]);
+            if (off[i][j] != 0) e.w = min(off[i][j], arr[i] + arr[j]);
             else 
                 e.w = arr[i] + arr[j];
             edges.push_back(e);
         }
     }
+    for (auto el : edges) {
+        cout << el.u << ' ' << el.v << ' ' << el.w << '\n';
+    }
     sort(edges.begin(), edges.end(), [ & ](Edge i, Edge j){
         return i.w < j.w;
     });
     ll answ = 0;
+    cout << '\n';
     for (ll i = 0; i < (ll)n*(ll)(n - 1)/2; i++) {
         if(getRoot(edges[i].u) == getRoot(edges[i].v)) {
             answ += edges[i].w;
+            cout << edges[i].u << ' ' << edges[i].v << ' ' << edges[i].w << '\n';
             unite(edges[i].u, edges[i].v);
         }
     }
