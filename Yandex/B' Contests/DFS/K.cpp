@@ -34,10 +34,10 @@ bool check(int mid) {
         }
     }
     reverse(order.begin(), order.end());
-    for (int i = 0; i < n; i++) {
+    /*for (int i = 0; i < n; i++) {
         cout << order[i] << ' ';
     }
-    cout << '\n';
+    cout << '\n';*/
     int color = 0;
     used.assign(n, -1);
     for (auto v : order) {
@@ -46,10 +46,10 @@ bool check(int mid) {
             color++;
         }
     }
-    for (int i = 0; i < n; i++) {
+    /*for (int i = 0; i < n; i++) {
         cout << used[i] << ' ';
     }
-    cout << " used\n";
+    cout << " used\n";*/
     if (color == 1) {
         return true;
     } else {
@@ -85,6 +85,10 @@ int main() {
         }
     }
     return 0;*/
+    if (maxVal == 0) {
+        cout << 0;
+        return 0;
+    }
     int l = minVal - 1, r = maxVal + 1;
     while (r - l > 1) {
         int mid = l + (r - l) / 2;
@@ -94,7 +98,11 @@ int main() {
             l = mid;
         }
     }
-    cout << r;
+    if (r > maxVal) {
+        cout << maxVal;
+    } else {
+        cout << r;
+    }
     return 0;
 }
 

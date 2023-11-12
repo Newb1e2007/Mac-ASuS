@@ -24,7 +24,7 @@ void dfs2(int v, int mid) {
     }
 }
 
-bool check(int mid) {
+bool check(int mid) {  // 4000
     used.assign(n, 0);
     dfs1(0, mid);
     for (auto v : used) {
@@ -58,8 +58,12 @@ int main() {
             }
         }
     }
+    if (maxVal == 0) {
+        cout << 0;
+        return 0;
+    }
     int l = minVal - 1, r = maxVal + 1;
-    while (r - l > 1) {
+    while (r - l > 1) {  // 29*4000
         int mid = l + (r - l) / 2;
         if (check(mid)) {
             r = mid;
@@ -67,7 +71,11 @@ int main() {
             l = mid;
         }
     }
-    cout << r;
+    if (r > maxVal) {
+        cout << maxVal;
+    } else {
+        cout << r;
+    }
     return 0;
 }
 

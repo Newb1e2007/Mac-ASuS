@@ -31,7 +31,7 @@ int main() {
     int i = n;
     map<int, int> WInd_heap;
     while (dp[i--][maxW] != 0) {
-        int x = i, y = maxW, cnt = 0;
+        int x = i + 1, y = maxW, cnt = 0;
         for (int i = 1; i <= n; i++) {
             WInd_heap[i] = 0;
         }
