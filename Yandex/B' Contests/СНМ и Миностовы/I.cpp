@@ -15,7 +15,7 @@ int getRoot(int v) {
     return p[v] = getRoot(p[v]);
 }
 
-void unite(int a, int b) {
+void unite(int a, int b) { 
     a = getRoot(a);
     b = getRoot(b);
     if (a == b) return;
@@ -33,47 +33,34 @@ int main() {
     sz.resize(n, 1);
     iota(p.begin(), p.end(), 0);
     vector<ll> arr(n);
+    int minV = 0;
     for (int i = 0; i < n; i++) {
         cin >> arr[i];
+        if (arr[i] < arr[minV]) {
+            minV = i;
+        }
     }
-    vector<vector<ll>> off(n, vector<ll>(n));
+    vector<Edge> edges;
     for (int i = 0; i < m; i++) {
         int a, b; cin >> a >> b;
         ll w; cin >> w;
-        off[a - 1][b - 1] = w;
-        off[b - 1][a - 1] = w;
+        Edge e; e.u = a - 1; e.v = b - 1; e.w = w;
+        edges.push_back(e);
     }
+    
     for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            cout << off[i][j] << ' ';
-        }
-        cout << '\n';
-    }
-    cout << '\n';
-    vector<Edge> edges;
-    edges.reserve((ll)n*(ll)(n - 1)/(ll)2);
-    for (int i = 0; i < n; i++) {
-        for (int j = i; j < n; j++) {
-            Edge e; e.u = i; e.v = j;
-            if (off[i][j] != 0) e.w = min(off[i][j], arr[i] + arr[j]);
-            else 
-                e.w = arr[i] + arr[j];
-            edges.push_back(e);
-        }
-    }
-    for (auto el : edges) {
-        cout << el.u << ' ' << el.v << ' ' << el.w << '\n';
+        if (i == minV) continue;
+        Edge e; e.u = i; e.v = minV; e.w = arr[i] + arr[minV];
+        edges.push_back(e);
     }
     sort(edges.begin(), edges.end(), [ & ](Edge i, Edge j){
         return i.w < j.w;
     });
     ll answ = 0;
-    cout << '\n';
-    for (ll i = 0; i < (ll)n*(ll)(n - 1)/2; i++) {
-        if(getRoot(edges[i].u) == getRoot(edges[i].v)) {
-            answ += edges[i].w;
-            cout << edges[i].u << ' ' << edges[i].v << ' ' << edges[i].w << '\n';
-            unite(edges[i].u, edges[i].v);
+    for (auto edge : edges) {
+        if (getRoot(edge.u) != getRoot(edge.v)) {
+            answ += edge.w;
+            unite(edge.u, edge.v);
         }
     }
     cout << answ;
