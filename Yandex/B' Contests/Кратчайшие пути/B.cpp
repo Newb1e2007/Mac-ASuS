@@ -6,7 +6,7 @@ vector<int> p;
 int n;
 
 vector<int> dijkstra(int s, int f) {
-    vector<int> dist(n, INT_MAX); dist[s] = 0;
+    vector<int> dist(n, 2e9); dist[s] = 0;
     priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> notVis;
     for (int v = 0; v < n; v++) {
         notVis.emplace(dist[v], v);
@@ -42,7 +42,7 @@ int main() {
         graph[e - 1].emplace_back(b - 1, w);
     }
     vector<int> answ = dijkstra(s - 1, t - 1);
-    if (answ[t - 1] == INT_MAX) {
+    if (answ[t - 1] == 2e9) {
         cout << -1 << '\n';
         return 0;
     } else {
