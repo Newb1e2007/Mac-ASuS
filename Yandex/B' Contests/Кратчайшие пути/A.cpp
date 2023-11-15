@@ -3,12 +3,14 @@
 using namespace std;
 vector<set<int>> graph;
 vector<int> used;
+int INF = INT32_MAX;
 
 bool dfs(int v, int s) {
     used[v] = 1;
+    if (v == s) return true;
     bool answ = false;
     for (int u : graph[v]) {
-        if (!used[u]) answ += dfs(u, s);
+        if (!used[u]) {answ += dfs(u, s);} 
         else {
             if (u == s) {
                 return true;
@@ -18,8 +20,8 @@ bool dfs(int v, int s) {
     return answ;
 }
 
-vector<int> dijkstra(int v) {
-    /*vector<int> dist(n, INF); dist[0] = 0;
+vector<int> dijkstra(int v, int n) {
+    vector<int> dist(n, INF); dist[v] = 0;
     set<pair<int, int>> notVis;
     for (int v = 0; v < n; v++) {
         notVis.insert(make_pair(dist[v], v));
@@ -28,16 +30,15 @@ vector<int> dijkstra(int v) {
         pair<int, int> u = *notVis.begin();
         notVis.erase(u);
 
-        for (pair<int, int>& newU : graph[u.second]) {
-            if (dist[newU.first] > dist[u.second] + newU.second) {
-                notVis.erase({dist[newU.first], newU.first});
-                dist[newU.first] = dist[u.second] + newU.second;
-                notVis.insert({dist[newU.first], newU.first});
+        for (int newU : graph[u.second]) {
+            if (dist[newU] > dist[u.second] + 1) {
+                notVis.erase({dist[newU], newU});
+                dist[newU] = dist[u.second] + 1;
+                notVis.insert({dist[newU], newU});
             }
         }
     }
-    return dist;*/
-    
+    return dist;
 }
 
 int main() {
@@ -61,7 +62,7 @@ int main() {
         cout << -1;
         return 0;
     }
-    vector<int> answ = dijkstra(d);
-    cout << answ[v];
+    vector<int> answ = dijkstra(d - 1, n);
+    cout << answ[v - 1];
     return 0;
 }
