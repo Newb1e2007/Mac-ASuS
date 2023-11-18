@@ -14,7 +14,9 @@ vector<int> dijkstra(int s, int f) {
     while (!notVis.empty()) {
         auto [d, v] = notVis.top();
         notVis.pop();
-        if (v == f) break;
+        if (v == f) {
+            break;
+        }
         for (const auto& [u, d1] : graph[v]) {
             if (dist[u] > d1 + dist[v]) {
                 dist[u] = d1 + dist[v];
@@ -48,10 +50,10 @@ int main() {
     } else {
         cout << answ[t - 1] << '\n';
         vector<int> path;
-        for (int v = t - 1; v != s - 1; v = p[v]) {
+        for (int v = t - 1; v != -1; v = p[v]) {
             path.push_back(v);
         }
-        path.push_back(s - 1);
+        //path.push_back(s - 1);
         reverse(path.begin(), path.end());
         cout << path.size() << '\n';
         for (auto el : path) {

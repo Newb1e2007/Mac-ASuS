@@ -11,7 +11,8 @@ int main() {
     vector<vector<int>> dp(n, vector<int>(n, 30000));
     for (int i = 0; i < m; i++) {
         int v, u, w; cin >> v >> u >> w;
-        dp[v - 1][u - 1] = w;
+        dp[v - 1][u - 1] = min(dp[v - 1][u - 1], w);
+        //dp[v - 1][u - 1] = w;
     }
     for (int i = 0; i < n; i++) {
         dp[i][i] = 0;
@@ -20,7 +21,7 @@ int main() {
     for (int k = 0; k < n; k++) {
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
-                if (dp[i][k] != 30000 && dp[k][j] != 30000 && dp[i][j] != 30000)
+                if (dp[i][k] != 30000 && dp[k][j] != 30000/* && dp[i][j] != 30000*/)
                     dp[i][j] = min(dp[i][j], dp[i][k] + dp[k][j]);
             }
         }

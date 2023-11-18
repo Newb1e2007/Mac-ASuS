@@ -25,8 +25,8 @@ void dfs2(int v) {
 }
 
 int main() {
-    ios::sync_with_stdio(0);
-    cin.tie(0);
+    //ios::sync_with_stdio(0);
+    //cin.tie(0);
 
     int n, m; cin  >> n >> m;
     graph.resize(n);
@@ -54,6 +54,7 @@ int main() {
             return 0;
         }
     }
+    cout << '\n';
     sort(nGraph.begin(), nGraph.end(), [ & ](pair<pair<int, int>, int> i, pair<pair<int, int>, int> j) {
         return i.second < j.second;
     });
