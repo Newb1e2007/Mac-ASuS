@@ -4,16 +4,22 @@ using namespace std;
 
 const int MAXN = 1e5;
 vector<int> st(4*MAXN);
-map<int, int> el_pos;
+vector<int> arr;
+
+int nod(int a, int b) {
+    if (b == 0) {return a;}
+    else {return nod(b, a%b);}
+}
 
 void build(int v, int l, int r) {
     if (r - l == 1) {
+        st[v] = arr[l];
         return;
     }
     int mid = l + (r - l) / 2;
     build(2*v + 1, l, mid);
     build(2*v + 2, mid, r);
-    st[v] = max(st[2*v + 1], st[2*v + 2]);
+    st[v] = nod(st[2*v + 1], st[2*v + 2]);
 }
 
 void update(int i, int x, int v, int l, int r) {
@@ -27,14 +33,15 @@ void update(int i, int x, int v, int l, int r) {
     } else {
         update(i, x, 2*v + 2, mid, r);
     }
-    st[v] = max(st[2*v + 1], st[2*v + 2]);
+    st[v] = nod(st[2*v + 1], st[2*v + 2]);
+    
 }
 
 int get(int ql, int qr, int v, int l, int r) {
     if (qr <= l || r <= ql) return 0;
     if (ql <= l && r <= qr) return st[v];
     int mid = l + (r - l) / 2;
-    return max(get(ql, qr, 2*v + 1, l, mid), get(ql, qr, 2*v + 2, mid, r));
+    return nod(get(ql, qr, 2*v + 1, l, mid), get(ql, qr, 2*v + 2, mid, r));
 }
 
 int main() {
@@ -42,17 +49,23 @@ int main() {
     cin.tie(0);
 
     int n; cin >> n;
+    arr.resize(n);
     for (int i = 0; i < n; i++) {
-        int x; cin >> x;
-        el_pos[x] = i + 1;
-        update(i, x, 0, 0, n);
+        cin >> arr[i];
     }
-    int k; cin >> k;
-    for (int i = 0; i < k; i++) {
-        int l, r; cin >> l >> r;
-        l--;
-        int answ = get(l, r, 0, 0, n);
-        cout << answ << ' ' << el_pos[answ] << '\n';
+    build(0, 0, n);
+    int m; cin >> m;
+    for (int i = 0; i < m; i++) {
+        char c; cin >> c;
+        if (c == 's') {
+            int l, r; cin >> l >> r;
+            l--;
+            cout << get(l, r, 0, 0, n) << ' ';
+        } else {
+            int i, x; cin >> i >> x; 
+            i--;
+            update(i, x, 0, 0, n);
+        }
     }
     return 0;
 }
