@@ -42,10 +42,10 @@ int main() {
     int q; cin >> q;
     for (int i = 0; i < q; i++) {
         int e; cin >> e;
-        int a = edges[e - 1].first, b = edges[e - 1].second;
+        int a = edges[e - 1].first, b = edges   [e - 1].second;
         if (sz[a] > sz[b]) swap(a, b);
         int c = col_sz[colors[a]];
-        cout << sz[a] * (c - sz[a]) << '\n';
+        cout << (long long)sz[a] * (long long)(c - sz[a]) << '\n';
     }
     cout.flush();
     return 0;
