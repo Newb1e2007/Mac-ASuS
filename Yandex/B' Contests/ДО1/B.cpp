@@ -10,7 +10,7 @@ struct Node {
 };
 
 int MAXN = 5e5;
-vector<Node> st(MAXN);
+vector<Node> st(4*MAXN);
 vector<int> arr;
 
 Node merge(const Node& l, const Node& r) {
@@ -39,7 +39,7 @@ void build (int v, int l, int r) {
     }
     int mid = l + (r - l) / 2;
     build(2*v + 1, l, mid);
-    build(2*v + 1, mid, r);
+    build(2*v + 2, mid, r);
     st[v] = merge(st[2*v + 1], st[2*v + 2]);
 }
 
@@ -63,11 +63,14 @@ void update(int i, int x, int v, int l, int r) {
     st[v] = merge(st[2*v + 1], st[2*v + 2]);
 }
 
-int get(int ql, int qr, int v, int l, int r) {
-    if (qr <= l || r <= ql) return 0;
-    if (ql <= l && r <= qr) return st[v].answ;
+Node get(int ql, int qr, int v, int l, int r) {
+    if (qr <= l || r <= ql) {
+        Node ret; ret.len = 0;
+        return ret;
+    }
+    if (ql <= l && r <= qr) return st[v];
     int mid = l + (r - l) / 2;
-    return max(get(ql, qr, 2*v + 1, l, mid), get(ql, qr, 2*v + 2, mid, r));
+    return merge(get(ql, qr, 2*v + 1, l, mid), get(ql, qr, 2*v + 2, mid, r));
 }
 
 int main() {
@@ -89,7 +92,7 @@ int main() {
         } else {
             int l, r; cin >> l >> r;
             l--;
-            cout << get(l, r, 0, 0, n) << '\n';
+            cout << get(l, r, 0, 0, n).answ << '\n';
         }
     }
     return 0;
