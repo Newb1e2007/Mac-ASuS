@@ -1,8 +1,8 @@
 #include <bits/stdc++.h>
 
 using namespace std;
-const int MAXN = 1e6;
-vector < int > st(MAXN * 4);
+int MAXN = 1e9;
+vector < int > st(2*MAXN - 1);
 vector < int > arr;
 
 void build(int v, int l, int r) {
@@ -16,16 +16,16 @@ void build(int v, int l, int r) {
     st[v] = st[2 * v + 1] + st[2 * v + 2];
 }
 
-void update(int i, int v, int l, int r) {
+void update(int i, int x, int v, int l, int r) {
     if (r - l == 1) {
-        st[v]++;
+        st[v] += x;
         return;
     }
     int mid = l + (r - l) / 2;
     if (i < mid) {
-        update(i, 2 * v + 1, l, mid);
+        update(i, x, 2 * v + 1, l, mid);
     } else {
-        update(i, 2 * v + 2, mid, r);
+        update(i, x, 2 * v + 2, mid, r);
     }
     st[v] = st[2 * v + 1] + st[2 * v + 2];
 }
@@ -41,8 +41,7 @@ int main() {
     ios::sync_with_stdio(0);
     cin.tie(0);
 
-    int n;
-    cin >> n;
+    int n; cin >> n;
     arr.resize(n);
     int maxEl = 0;
     for (int i = 0; i < n; i++) {
@@ -51,9 +50,20 @@ int main() {
     }
     build(0, 0, maxEl);
     unsigned long long answ = 0;
-    for (int el : arr) {
-        answ += (unsigned long long)get(el, maxEl, 0, 0, maxEl);
-        update(el, 0, 0, maxEl);
+    for (int i = 0; i < n; i++) {
+        for (int j = i - 1; j >= 0; j--) {
+            if (arr[j] > arr[i]) {
+                update(arr[j], -1, 0, 0, maxEl);
+                answ += (unsigned long long)get(arr[j], maxEl, 0, 0, maxEl);
+            }
+        }
+        for (int j = 0; j < i; j++) {
+            if (arr[j] > arr[i]) {
+                update(arr[j], 1, 0, 0, maxEl);
+            }
+        }
+        update(arr[i], 1, 0, 0, maxEl);
     }
     cout << answ;
+    return 0;
 }
