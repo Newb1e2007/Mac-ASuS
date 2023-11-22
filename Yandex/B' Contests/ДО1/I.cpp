@@ -1,8 +1,8 @@
 #include <bits/stdc++.h>
 
 using namespace std;
-int MAXN = 1e9;
-vector < int > st(2*MAXN - 1);
+int MAXN = 1e6;
+vector < int > st(4*MAXN);
 vector < int > arr;
 
 void build(int v, int l, int r) {
