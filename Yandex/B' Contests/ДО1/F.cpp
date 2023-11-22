@@ -3,33 +3,70 @@
 using namespace std;
 
 struct Node {
-    int suff;
-    int answ; // >= 0 всегда
-    int pref;
-    int len;
+    int suff = 0;
+    int maxSumm = 0; // >= 0 всегда
+    int pref = 0;
+    int allSumm = 0;
 };
 
-void merge(const Node& l, const Node& r) {
+const int MAXN = 3e5;
+vector<Node> st(MAXN*4);
+vector<int> arr;
+
+Node merge(const Node& l, const Node& r) {
     Node res;
-    res.len = l.len + r.len;
-    if (l.suff + r.pref <= r.answ) {
-        res.answ = l.answ + l.suff + r.pref + r.answ;
-    } else {
-        if (l.answ > r.answ) {
-            res.answ = l.answ;
-            res.pref = l.pref;
-            res.suff = l.suff + r.pref + r.answ + r.pref;
-        } else if (l.answ == r.answ) {
-            res.answ = l.answ;
-            if (l.pref > r.suff) {
-                res.pref = l.pref;
-                res.suff = l.suff + r.pref + r.answ + r.suff;
-            } else {
-                res.pref = l.suff + l.pref + l.answ + r.pref;
-                res
-            }
-        }
+    res.pref = max(l.pref, l.allSumm + r.pref);
+    res.suff = max(r.suff, r.allSumm + l.suff);
+    res.maxSumm = max(max(l.maxSumm, r.maxSumm), l.suff + r.pref);
+    res.allSumm = l.allSumm + r.allSumm;
+    return res;
+}
+
+void build(int v, int l, int r) {
+    if (r - l == 1) {
+        Node a;
+        a.allSumm = arr[l];
+        a.maxSumm = arr[l];
+        a.suff = arr[l];
+        a.pref = arr[l];
+        st[v] = a;
+        return;
     }
+    int mid = l + (r - l) / 2;
+    build(2*v, l, mid);
+    build(2*v + 1, mid, r);
+    st[v] = merge(st[2*v], st[2*v + 1]);
+}
+
+void build(int i, int x, int v, int l, int r) {
+    if (r - l == 1) {
+        Node a; 
+        a.allSumm = x;
+        a.maxSumm = x;
+        a.suff = x;
+        a.pref = x;
+        st[v] = a;
+        return;
+    }
+    int mid = l + (r - l) / 2;
+    if (i < mid) {
+        build(2*v, l, mid);
+    } else {
+        build(2*v + 1, mid, r);
+    }
+    st[v] = merge(st[2*v], st[2*v + 1]);
+}
+
+Node get(int ql, int qr, int v, int l, int r) {
+    if (qr <= l || r <= ql) {
+        Node a;
+        return a;
+    }
+    if (ql <= l && r <= qr) {
+        return st[v];
+    }
+    int mid = l + (r - l ) / 2;
+    return merge(get(ql, qr, 2*v, l, mid), get(ql, qr, 2*v + 1, mid, r));
 }
 
 int main() {
