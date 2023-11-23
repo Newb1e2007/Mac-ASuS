@@ -28,10 +28,10 @@ Node merge(const Node& l, const Node& r) {
     return res;
 }
 
-void update(int i, Node x, int v, int l, int r) {
+void update(int i, pair<int, int> x, int v, int l, int r) {
     if (r - l == 1) {
-        //Node a; a.len = x.first; a.cnt = x.second;
-        st[v] = x;
+        Node a; a.len = 1; a.cnt = x.first;
+        st[v] = a;
         return; 
     } 
     int mid = l + (r - l) / 2;
