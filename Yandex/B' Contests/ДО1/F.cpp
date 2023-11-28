@@ -1,16 +1,17 @@
 #include <bits/stdc++.h>
 
 using namespace std;
+using ll = long long;
 
 struct Node {
-    int suff = 0;
-    int maxSumm = 0; // >= 0 всегда
-    int pref = 0;
-    int allSumm = 0;
+    ll suff = 0;
+    ll maxSumm = 0; // >= 0 всегда
+    ll pref = 0;
+    ll allSumm = 0;
 };
 
 const int MAXN = 3e5;
-vector<Node> st(MAXN*4);
+vector<Node> st(MAXN*4);    
 vector<int> arr;
 
 Node merge(const Node& l, const Node& r) {
@@ -33,12 +34,12 @@ void build(int v, int l, int r) {
         return;
     }
     int mid = l + (r - l) / 2;
-    build(2*v, l, mid);
-    build(2*v + 1, mid, r);
-    st[v] = merge(st[2*v], st[2*v + 1]);
+    build(2*v + 1, l, mid);
+    build(2*v + 2, mid, r);
+    st[v] = merge(st[2*v + 1], st[2*v + 2]);
 }
 
-void build(int i, int x, int v, int l, int r) {
+void update(int i, ll x, int v, int l, int r) {
     if (r - l == 1) {
         Node a; 
         a.allSumm = x;
@@ -50,11 +51,11 @@ void build(int i, int x, int v, int l, int r) {
     }
     int mid = l + (r - l) / 2;
     if (i < mid) {
-        build(2*v, l, mid);
+        update(i, x, 2*v + 1, l, mid);
     } else {
-        build(2*v + 1, mid, r);
+        update(i, x, 2*v + 2, mid, r);
     }
-    st[v] = merge(st[2*v], st[2*v + 1]);
+    st[v] = merge(st[2*v + 1], st[2*v + 2]);
 }
 
 Node get(int ql, int qr, int v, int l, int r) {
@@ -66,12 +67,28 @@ Node get(int ql, int qr, int v, int l, int r) {
         return st[v];
     }
     int mid = l + (r - l ) / 2;
-    return merge(get(ql, qr, 2*v, l, mid), get(ql, qr, 2*v + 1, mid, r));
+    return merge(get(ql, qr, 2*v + 1, l, mid), get(ql, qr, 2*v + 2, mid, r));
 }
 
 int main() {
     ios::sync_with_stdio(0);
     cin.tie(0);
 
+    int n, m; cin >> n >> m;
+    arr.resize(n);
+    for (int i = 0; i < n; i++) {
+        cin >> arr[i];
+    }
+    build(0, 0, n);
+    for (int i = 0; i < m; i++) {
+        string s; cin >> s;
+        if (s == "change") {
+            int ps, val; cin >> ps >> val;
+            update(ps - 1, (ll)val, 0, 0, n);
+        } else {
+            int l, r; cin >> l >> r;
+            cout << get(l - 1, r, 0, 0, n).maxSumm << '\n';
+        }
+    }
     return 0;
 }

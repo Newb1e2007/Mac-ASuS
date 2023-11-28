@@ -1,18 +1,20 @@
 #include <bits/stdc++.h>
 
 using namespace std;
-int MAXN = 1e6;
+const int MAXN = 1e6;
 vector < int > st(4*MAXN);
 vector < int > arr;
 
 void build(int v, int l, int r) {
+    cout << "build 1\n";
+    cout << v << '\n';
     if (r - l == 1) {
         st[v] = 0;
         return;
     }
     int mid = l + (r - l) / 2;
     build(2 * v + 1, l, mid);
-    build(2 * v + 2, mid, r);
+    build(2 * v + 2, mid, r);   
     st[v] = st[2 * v + 1] + st[2 * v + 2];
 }
 
