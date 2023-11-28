@@ -1,22 +1,22 @@
 #include <bits/stdc++.h>
 
 using namespace std;
-using ll = long long;
-ll INF = 3e10;
+//using ll = long long;
+int INF = INT32_MAX;
 
 int main() {
     ios::sync_with_stdio(0);
     cin.tie(0);
 
     int n, m; cin >> n >> m;
-    vector<vector<ll>> dp(n, vector<ll>(n, INF));
+    vector<vector<int>> dp(n, vector<int>(n, INF));
     vector<vector<int>> from(n, vector<int> (n, -1));
     for (int i = 0; i < n; i++) {
         dp[i][i] = 0;
     }
     for (int i = 0; i < m; i++) {
         int a, b; cin >> a >> b;
-        ll w; cin >> w;
+        int w; cin >> w;
         from[a - 1][b - 1] = a - 1;
         dp[a - 1][b - 1] = min(dp[a - 1][b - 1], w);
     }
