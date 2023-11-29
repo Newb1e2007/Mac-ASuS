@@ -6,7 +6,8 @@ using ull = unsigned long long;
 using ld = long double;
 
 void solve() {
-    cout << (11 & 1);
+    n = 
+    cout << 8 / 4;
 }
 
 int main() {
