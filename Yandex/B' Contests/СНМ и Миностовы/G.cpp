@@ -1,13 +1,19 @@
 #include <bits/stdc++.h>
 
 using namespace std;
+using ll = long long;
+using ull = unsigned long long;
+using ld = long double;
+using pii = pair<int, int>;
+double eps = 1e-5;
 vector<int> p, sz;
-double eps = 1e-4;
 
-struct Edge {
-    int u, v;
-    double w;
+struct Edge
+{
+    int v, u;
+    double w;  
 };
+
 
 int dist(int x1, int y1, int x2, int y2) {
     if (x1 < 0 && x2 < 0) {
@@ -18,7 +24,7 @@ int dist(int x1, int y1, int x2, int y2) {
         y2 += abs(y1);
         y1 = 0;
     }
-    return (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2);
+    return (x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2);
 }
 
 int getRoot(int v) {
@@ -35,14 +41,11 @@ void unite(int a, int b) {
     sz[b] += sz[a];
 }
 
-int main() {
-    ios::sync_with_stdio(0);
-    cin.tie(0);
-
+void solve() {
     int n; cin >> n;
     p.resize(n);
-    sz.resize(n, 1);
     iota(p.begin(), p.end(), 0);
+    sz.resize(n, 1);
     vector<pair<int, int>> vertexes(n);
     for (int i = 0; i < n; i++) {
         cin >> vertexes[i].first >> vertexes[i].second;
@@ -59,18 +62,26 @@ int main() {
         //return i.w < j.w;
         return j.w - i.w > -eps;
     });
-    /*for (auto edge : edges) {
-        cout << edge.u << ' ' << edge.v << ' ' << edge.w << "; ";
+    int m; cin >> m;
+    for (int i = 0; i < m; i++) {
+        int a,b; cin >> a >> b;
+        unite(a - 1, b - 1);
     }
-    cout << '\n' << '\n';*/
     double answ = 0;
-    for (auto edge : edges) {
+    for (Edge edge : edges) {
         if (getRoot(edge.u) != getRoot(edge.v)) {
-            //cout << edge.u << ' ' << edge.v << ' ' << edge.w << '\n';
             answ += edge.w;
             unite(edge.u, edge.v);
         }
     }
-    cout << fixed << setprecision(10) << answ   ;
-    return 0;       
+    cout << fixed << setprecision(6) << answ;
+} 
+
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+
+    int t = 1; //cin >> t;
+    while (t--) solve();
+    return 0;
 }
