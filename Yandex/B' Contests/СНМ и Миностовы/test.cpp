@@ -1,119 +1,34 @@
-#include <cstdio>
-
-#include <algorithm>
-
-#include <vector>
+#include<bits/stdc++.h>
 
 using namespace std;
 
- 
-
-struct Edge
-
-{
-
-  int u, v, dist;
-
-};
-
- 
-
-vector<Edge> e;
-
-vector<int> parent, depth;
-
-int i, n, m, res;
-
- 
-
-int Repr(int n)
-
-{
-
-  if (n == parent[n]) return n;
-
-  return parent[n] = Repr(parent[n]);
-
-}
-
- 
-
-int Union(int x, int y)
-
-{
-
-  x = Repr(x); y = Repr(y);
-
-  if (x == y) return 0;
-
-  if (depth[x] < depth[y]) swap(x, y);
-
-  parent[y] = x;
-
-  if (depth[x] == depth[y]) depth[x]++;
-
-  return 1;
-
-}
-
- 
-
-int lt(Edge a, Edge b)
-
-{
-
-  return a.dist < b.dist;
-
-}
-
- 
-
-int main(void)
-
-{
-
-  scanf("%d %d", &n, &m);
-
- 
-
-  parent.resize(n + 1);
-
-  depth.resize(n + 1);
-
-  for (i = 1; i <= n; i++)
-
-  {
-
-    parent[i] = i;
-
-    depth[i] = 0;
-
-  }
-
- 
-
-  e.resize(m);
-
-  for (i = 0; i < m; i++)
-
-    scanf("%d %d %d", &e[i].u, &e[i].v, &e[i].dist);
-
- 
-
-  sort(e.begin(), e.end(), lt);
-
- 
-
-  res = 0;
-
-  for (i = 0; i < m; i++)
-
-    if (Union(e[i].u, e[i].v)) res += e[i].dist;
-
- 
-
-  printf("%d\n", res);
-
-  return 0;
-
+int main() {
+    int n; cin >> n;
+    vector < vector<int> > g;
+    const int INF = 1000000000; // значение "бесконечность"
+    
+    // алгоритм
+    vector<bool> used (n);
+    vector<int> min_e (n, INF), sel_e (n, -1);
+    min_e[0] = 0;
+    for (int i=0; i<n; ++i) {
+      int v = -1;
+      for (int j=0; j<n; ++j)
+        if (!used[j] && (v == -1 || min_e[j] < min_e[v]))
+          v = j;
+      if (min_e[v] == INF) {
+        cout << "No MST!";
+        exit(0);
+      }
+    
+      used[v] = true;
+      if (sel_e[v] != -1)
+        cout << v << " " << sel_e[v] << endl;
+    
+      for (int to=0; to<n; ++to)
+        if (g[v][to] < min_e[to]) {
+          min_e[to] = g[v][to];
+          sel_e[to] = v;
+        }
+    }
 }
