@@ -9,25 +9,26 @@ using pii = pair<int, int>;
 void solve() {
     int n; cin >> n;
     vector<vector<int>> arr(n, vector<int>(n));
-    int cnt = 0;
+    vector<int> els(n, (1<<30) - 1);
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
             cin >> arr[i][j];
-            if (arr[i][j] == 0) cnt++;
+            if (i == j) continue;
+            els[i] &= arr[i][j];
+            els[j] &= arr[i][j];
         }
     }
-    if (cnt > n) {
-        cout << "NO\n";
-        return;
-    } 
-    vector<int> answ(n);
-    answ[0] = 1;
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            if (i != j && (els[i] | els[j]) != arr[i][j]) {
+                cout << "NO\n";
+                return;
+            }
+        }
+    }    
     cout << "YES\n";
-    for (int i = 1; i < n; i++) {
-        answ[i] = arr[0][i] | 1;
-    }
-    for (auto el : answ) cout << el << ' ';
-    cout << '\n';
+    for (int el : els) cout << el << ' ';
+    cout << '\n';    
 }
 
 int main() {
