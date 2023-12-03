@@ -74,3 +74,60 @@ int main() {
     cout << fixed << setprecision(10) << answ   ;
     return 0;       
 }
+
+/*int n;
+vector < vector<int> > g;
+const int INF = 1000000000; // значение "бесконечность"
+ 
+// алгоритм
+vector<bool> used (n);
+vector<int> min_e (n, INF), sel_e (n, -1);
+min_e[0] = 0;
+for (int i=0; i<n; ++i) {
+	int v = -1;
+	for (int j=0; j<n; ++j)
+		if (!used[j] && (v == -1 || min_e[j] < min_e[v]))
+			v = j;
+	if (min_e[v] == INF) {
+		cout << "No MST!";
+		exit(0);
+	}
+ 
+	used[v] = true;
+	if (sel_e[v] != -1)
+		cout << v << " " << sel_e[v] << endl;
+ 
+	for (int to=0; to<n; ++to)
+		if (g[v][to] < min_e[to]) {
+			min_e[to] = g[v][to];
+			sel_e[to] = v;
+		}
+}*/
+
+/*Explain
+const int maxn = 1e5, inf = 1e9;
+bool used[maxn];
+vector< pair<int, int> > g[maxn];
+int min_edge[maxn] = {inf}, best_edge[maxn];
+min_edge[0] = 0;
+
+// ...
+
+for (int i = 0; i < n; i++) {
+    int v = -1;
+    for (int u = 0; u < n; u++)
+        if (!used[u] && (v == -1 || min_edge[u] < min_edge[v]))
+            v = u;
+
+    used[v] = 1;
+    if (v != 0)
+        cout << v << " " << best_edge[v] << endl;
+
+    for (auto e : g[v]) {
+        int u = e.first, w = e.second;
+        if (w < min_edge[u]) {
+            min_edge[u] = w;
+            best_edge[u] = v;
+        }
+    }
+}*/
