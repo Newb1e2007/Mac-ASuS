@@ -14,23 +14,20 @@ ll count_dist(coords v, coords u) {
 
 ll dijkstra(int v, int t) {
     vector<ll> dist(n, INF); dist[v] = 0;
-    vector<int> used(n);
-    priority_queue<plln, vector<plln>, greater<plln>> notVis;
+    vector<bool> used(n);
     for (int i = 0; i < n; i++) {
-        notVis.emplace(dist[i], i);
-    }
-    while (!notVis.empty()) {
-        auto [d, curV] = notVis.top();
-        notVis.pop();
-        used[curV] = 1;
-        if (graph[curV].first == graph[t].first && graph[v].second == graph[t].second) {
-            break;
-        }
-        for (int i = 0; i < n; i++) {
-            if (!used[i] && dist[i] > d + count_dist(graph[curV], graph[i])) {
-                dist[i] = d + count_dist(graph[curV], graph[i]);
-                notVis.emplace(dist[i], i);
+        int curV = -1;
+        ll curDist = INF;
+        for (int j = 0; j < n; j++) {
+            if (!used[j] && dist[j] < curDist) {
+                curV = j;
+                curDist = dist[j];
             }
+        }
+        used[curV] = true;
+
+        for (int j = 0; j < n; j++) {
+            dist[j] = min(dist[j], curDist + count_dist(graph[curV], graph[j]));
         }
     }
     return dist[t];

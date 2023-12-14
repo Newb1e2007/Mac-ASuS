@@ -30,18 +30,29 @@ int main() {
 
     vector<double> dist(n, 1.0e9); dist[0] = 0.0;
     vector<int> p(n, -1);
-    vector<int> used(n);
+    vector<bool> used(n);
+    //used[0] = true;
     double answ = 0;
 
     for (int i = 0; i < n; i++) {
         int v = -1;
-        for (int j = 0; j < n; j++)
-            if (!used[v] && (v == -1 || (v != -1 && dist[v] > dist[j]))) v = j;
-        cout << v << '\n';
-        used[v] = 1;
-        if (v != 0)
+        //double curDist = 1.0e9;
+        for (int j = 0; j < n; j++){ 
+            //cout << dist[j] << ' ' << '\n';
+            if ((v == -1 && !used[j]) || (!used[j] && dist[v] > dist[j])) {
+                //cout << v << ' ' << j << '\n';
+                v = j;
+                //curDist = dist[j];
+            }
+        }
+        //cout << v << '\n';
+        used[v] = true;
+        if (p[v] != -1) { 
+            //cout << p[v] << ' ' << v << ' ' << answ << " before ";
             answ += sqrt(countDist(vertexes[p[v]].first, vertexes[p[v]].second,
                 vertexes[v].first, vertexes[v].second));
+            //cout << answ << " after\n";
+        }
         for (int j = 0; j < n; j++) {
             double ndist = sqrt(countDist(vertexes[j].first, vertexes[j].second,
                 vertexes[v].first, vertexes[v].second));

@@ -11,10 +11,11 @@ vector<ll> arr;
 void apply(ll x, int v, int l, int r) {
     sp[v] += x;
     st[v] += x;
+    //cout << v << '\n';
 }
 
 void push(int v, int l, int r) {
-    int x = sp[v];
+    ll x = sp[v];
     if (x == 0) return;
     sp[v] = 0;
     int mid = l + (r - l) / 2;
@@ -36,7 +37,7 @@ void build(int v, int l, int r) {
 void update(int ql, int qr, ll x, int v, int l, int r) {
     if (qr <= l || r <= ql) {
         return;
-    }
+    }   
     if (ql <= l && r <= qr) {
         return apply(x, v, l, r);
     }
