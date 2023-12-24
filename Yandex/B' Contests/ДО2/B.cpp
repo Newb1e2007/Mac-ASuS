@@ -1,11 +1,12 @@
 #include <bits/stdc++.h>
 
 using namespace std;
-using ll = long long;
+using ull = unsigned long long;
 using pii = pair<int, int>;
 
 struct Node {
-    int min = 1e9, cnt = 0;
+    int min = 1e9;
+    int len = 0;
 };
 
 struct Event {
@@ -14,31 +15,37 @@ struct Event {
     int type;
 };
 
-const int MAXN = 1e5;
+const int MAXN = 1e6;
 vector<Node> st(MAXN * 4);
 vector<int> sp(MAXN * 4);
 vector<int> arr;
+vector<int> nums;
+vector<int> dist;
+
+int getCoord(int x) {
+    return lower_bound(nums.begin(), nums.end(), x) - nums.begin();
+}
 
 Node merge(const Node& l, const Node& r) {
     Node res;
     if (l.min < r.min) {
         res.min = l.min;
-        res.cnt = l.cnt;
+        res.len = l.len;
     } else if (l.min == r.min) {
         res.min = l.min;
-        res.cnt = l.cnt + r.cnt;
+        res.len = l.len + r.len;
     } else {
         res.min = r.min;
-        res.cnt = r.cnt;
+        res.len = r.len;
     }
     return res;
 }
 
 void build(int v, int l, int r) {
-    if (r - l == 1 ){
+    if (r - l == 1 ) {
         Node curV;
         curV.min = 0;
-        curV.cnt = 1;
+        curV.len = dist[l];  
         st[v] = curV;
         return;
     }
@@ -57,7 +64,7 @@ void push(int v, int l, int r) {
     int x = sp[v];
     if (x == 0) return;
     sp[v] = 0;
-    int mid = (r  + l)/ 2;
+    int mid = (r  + l) / 2;
     apply(x, 2 * v + 1, l, mid);
     apply(x, 2 * v + 2, mid, r);
 }
@@ -71,8 +78,8 @@ void update(int ql, int qr, int x, int v, int l, int r) {
     }
     int mid = (r + l) / 2;
     push(v, l, r);
-    update(ql, qr, x, v, l,mid);
-    update(ql, qr, x, v, mid, r);
+    update(ql, qr, x, 2 * v + 1, l,mid);
+    update(ql, qr, x, 2 * v + 2, mid, r);
     st[v] = merge(st[2 * v + 1], st[2 * v + 2]);
 }
 
@@ -94,13 +101,15 @@ int main() {
     cin.tie(0);
 
     int n; cin >> n;
+    if (n == 0) {
+        cout << 0;
+        return 0;
+    }
     vector<Event> eventsX;
-    int minY = 1e9, maxY = -1e9;
     for (int i = 0; i < n; i++) {
         int x1, y1, x2, y2; cin >> x1 >> y1 >> x2 >> y2;
-
-        minY = min(minY, y1);
-        maxY = max(maxY, y2);
+        nums.push_back(y1);
+        nums.push_back(y2);
 
         Event e;
         e.type = 1;
@@ -112,26 +121,34 @@ int main() {
         e.x = x2;
         eventsX.push_back(e);
     }
+    sort(nums.begin(), nums.end());
+    nums.resize(unique(nums.begin(), nums.end()) - nums.begin());
     sort(eventsX.begin(), eventsX.end(), [ & ] (Event i, Event j) {
         if (i.x == j.x) return i.type > j.type;
-        else return i.x < j.x;
+        return i.x < j.x;
     });
-    cout << maxY << ' ' << minY << '\n';
-    ll answ = 0;
+    for (int i = 1; i < (int)nums.size(); i++) {
+        dist.push_back(nums[i] - nums[i - 1]);
+    }
+    int sz = dist.size();
+    build(0, 0, sz);
+    ull answ = 0;
     int last = -1e9 - 1;
     int bal = 0;
     for (Event e : eventsX) {
         if (bal != 0) {
-            Node res = get(minY, maxY + 1, 0, minY, maxY + 1);
-            cout << res.min << ' ' << res.cnt << '\n';
+            Node res = get(0, sz, 0, 0, sz);
             if (res.min == 0) {
-                answ += (ll)abs(abs(e.x) - abs(last)) * (ll)(abs(abs(maxY) - abs(minY)) + 1 - res.cnt);
+                answ += (ull)(e.x - last) * (ull)(nums.back() - nums[0] - res.len);
             } else {
-                answ += (ll)abs(abs(e.x) - abs(last)) * (ll)(abs(abs(maxY) - abs(minY)) + 1);
+                answ += (ull)(e.x - last) * (ull)(nums.back() - nums[0]);
             }
         }
+        last = e.x;
         bal += e.type;
-        update(e.y1, e.y2, e.type, 0, minY, maxY + 1);
+        int y1 = getCoord(e.y1);
+        int y2 = getCoord(e.y2);
+        update(y1, y2, e.type, 0, 0, sz);
     }
     cout << answ;
 }

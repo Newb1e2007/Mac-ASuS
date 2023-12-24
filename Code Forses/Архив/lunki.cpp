@@ -57,16 +57,17 @@ void solve() {
                 
             vector<bool> used(n);
             used[a] = 1;
-            int cnt = 0;
             for (int k = a - 1; k >= a / sz * sz; k--) {
                 if (k + arr[k] == a) {
                     next[k] = next[a];
                     dist[k] = dist[a] + 1;
+                    used[k] = true;
                 } else if (k + arr[k] >= n) {
                     continue;
                 } else if (used[k + arr[k]]) {
                     next[k] = next[a];
                     dist[k] = dist[k + arr[k]] + 1;
+                    used[k] = true;
                 }
             }
         } else {

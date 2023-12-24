@@ -2,50 +2,55 @@
 
 using namespace std;
 using ll = long long;
+using pii = pair<int, int>;
 using ull = unsigned long long;
 using ld = long double;
 
-vector<int> p, sz;
-
-int getRoot(int v) {
-    if (p[v] == v) return v;
-    return p[v] = getRoot(p[v]);
-}
-
-void unite(int a, int b) {
-    a = getRoot(a);
-    b = getRoot(b);
-    if (a == b) return;
-    if (sz[a] > sz[b]) swap(a, b);
-    p[a] = b;
-    sz[b] += sz[a];
-}
+struct Node {
+    vector<int> els;
+};
 
 void solve() {
     int n, m; cin >> n >> m;
-    //vector<int> arr(n);
-    p.resize(n);
-    iota(p.begin(), p.end(), 0);
-    sz.resize(n, 1);
+    vector<int> next(n);
+    vector<int> arr(n);
     for (int i = 0; i < n; i++) {
-        //cin >> arr[i];
-        int x; cin >> x;
-        unite(i, x - 1);
-        //p[i] = x - 1;
+        int a; cin >> a;
+        if (a + i <= n - 1) {
+            next[i] = i + a;
+        } else {
+            next[i] = i;
+        }
     }
-    //cout << "aboba\n";
-    
+    vector<pii> suff(n);
+    for (int i = 0; i < n; i++ ) {
+        suff[i].second = i;
+    }
+    for (int i = n - 1; i >= 0; i--) {
+        suff[i].first = suff[next[i]].first + 1;
+        suff[i].second = suff[next[i]].second;
+    }
+
     for (int i = 0; i < m; i++) {
-        //cout << "emm\n";
         int t; cin >> t;
         if (t == 0) {
             int a, b; cin >> a >> b;
-            //p[a - 1] = b - 1;
-            unite(a - 1, b - 1);
+            if (a - 1 + b <= n - 1) {
+                next[a - 1] = a - 1 + b;    
+                suff[a - 1].first = suff[next[a - 1]].first + 1;
+                suff[a - 1].second = suff[next[a - 1]].second;
+            } else {
+                next[a - 1] = a - 1;
+                suff[a - 1].first = 1;
+                suff[a - 1].second = a - 1;
+            }
         } else {
             int a; cin >> a;
-            cout << getRoot(a) + 1 << ' ' << sz[a] << '\n'; 
+            cout << suff[a - 1].second + 1 << ' ' << suff[a - 1].first << '\n';
         }
+    }
+    for (int i = 0; i < n; i++) {
+        cout << suff[i].first << ' ' << suff[i].second << '\n';
     }
 }
 
